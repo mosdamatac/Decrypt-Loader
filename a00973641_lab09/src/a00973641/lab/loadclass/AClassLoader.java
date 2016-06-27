@@ -30,7 +30,7 @@ public class AClassLoader extends ClassLoader {
 			Method m = c.getMethod("main", new Class[] { args.getClass() });
 			m.invoke(null, new Object[] { args });
 		} catch (Throwable e) {
-			LabFrame.showError(e.getMessage());
+			LabFrame.showError(e.getCause() + ": " + e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
 		}

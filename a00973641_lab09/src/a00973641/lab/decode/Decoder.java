@@ -6,14 +6,14 @@
  */
 package a00973641.lab.decode;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Vector;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -91,14 +91,7 @@ public class Decoder {
 			System.exit(1);
 		}
 
-		@SuppressWarnings("rawtypes")
-		Vector fileBytes = readFile(cipher, fileName);
-		byte[] decryptedText = new byte[fileBytes.size()];
-
-		for (int i = 0; i < fileBytes.size(); i++) {
-			decryptedText[i] = ((Byte) fileBytes.elementAt(i)).byteValue();
-		}
-
+		byte[] decryptedText = readFile(cipher, fileName);
 		return decryptedText;
 	}
 
@@ -109,32 +102,36 @@ public class Decoder {
 	 * @param fileName
 	 * @return vector of bytes read from given file
 	 */
-	private Vector<Byte> readFile(Cipher cipher, String fileName) {
-		Vector<Byte> fileBytes = new Vector<>();
-		// read contents from file
-		try {
-			File file = new File(fileName);
-			FileInputStream fileInputStream = new FileInputStream(file);
-			CipherInputStream cipherInputStream = new CipherInputStream(fileInputStream, cipher);
+	private byte[] readFile(Cipher cipher, String fileName) {
+		FileInputStream inputfile = null;
+		ByteArrayOutputStream buffer = null;
+		CipherInputStream in = null;
 
+		// get byte value of given file
+		try {
+			inputfile = new FileInputStream(fileName);
+			buffer = new ByteArrayOutputStream();
 			int ch;
+			in = new CipherInputStream(inputfile, cipher);
 			@SuppressWarnings("unused")
 			int i = 0;
-			while ((ch = cipherInputStream.read()) != -1) {
+			while ((ch = inputfile.read()) != -1) {
 				byte b = (byte) (ch);
-				fileBytes.add(new Byte(b));
+				buffer.write(b);
 				i++;
 			}
-			cipherInputStream.close();
-		}
-		// handle IOException
-		catch (IOException exception) {
-			LabFrame.showError(exception.getMessage());
-			exception.printStackTrace();
+
+			in.close();
+		} catch (FileNotFoundException e) {
+			LabFrame.showError(e.getMessage());
+			e.printStackTrace();
+			System.exit(1);
+		} catch (IOException e) {
+			LabFrame.showError(e.getMessage());
+			e.printStackTrace();
 			System.exit(1);
 		}
 
-		// return buffer.toByteArray();
-		return fileBytes;
+		return buffer.toByteArray();
 	}
 }
