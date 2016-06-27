@@ -17,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -89,6 +90,12 @@ public class LabFrame extends JFrame {
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	public static void showError(String error) {
+		final JPanel panel = new JPanel();
+
+		JOptionPane.showMessageDialog(panel, error, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 }
