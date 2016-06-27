@@ -30,7 +30,7 @@ import a00973641.lab.loadclass.AClassLoader;
  *
  */
 public class LabFrame extends JFrame {
-
+	private static final long serialVersionUID = 1L;
 	// user input components.
 	private JTextField passwordTextField;
 	private JTextField fileNameTextField;
