@@ -115,7 +115,7 @@ public class Decoder {
 			in = new CipherInputStream(inputfile, cipher);
 			@SuppressWarnings("unused")
 			int i = 0;
-			while ((ch = inputfile.read()) != -1) {
+			while ((ch = in.read()) != -1) {
 				byte b = (byte) (ch);
 				buffer.write(b);
 				i++;
